@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { API_URL } from "../config";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -29,6 +29,7 @@ const Signup = () => {
         setError(true);
         return;
       }
+      navigate("/sign-in");
     } catch (err) {
       setLoading(false);
       setError(true);
@@ -41,6 +42,7 @@ const Signup = () => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <input
           type="text"
+          autoComplete="off"
           placeholder="Username"
           id="username"
           className="p-3 bg-slate-100 rounded-lg focus:outline-none"
