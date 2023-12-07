@@ -5,16 +5,11 @@ import jwt from "jsonwebtoken";
 
 export const signUp = async (req, res, next) => {
   const { username, email, password } = req.body;
+  const hashedPassword = bcryptjs.hashSync(password, 10);
+  const newUser = new User({ username, email, password: hashedPassword });
   try {
-    if ((username !== "" && email !== "", password !== "")) {
-      const hashedPassword = bcryptjs.hashSync(password, 10);
-      const newUser = new User({ username, email, password: hashedPassword });
-      await newUser.save();
-      res.status(201).json({ message: "User created successfully" });
-    }
-    return res.status(400).json({
-      message: "please fill all the fiels",
-    });
+    await newUser.save();
+    res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     next(error);
   }
@@ -29,7 +24,7 @@ export const signIn = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, "wrong credentials"));
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: hashedPassword, ...rest } = validUser._doc;
-    const expiryDate = new Date(Date.now() + 360000);
+    const expiryDate = new Date(Date.now() + 3600000);
     res
       .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(200)
@@ -45,11 +40,14 @@ export const google = async (req, res, next) => {
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: hashedPassword, ...rest } = user._doc;
-      const expiryDate = new Date(Date.now() + 3600);
-      res.cookie("access-token", token, {
-        httpOnly: true,
-        expires: expiryDate,
-      });
+      const expiryDate = new Date(Date.now() + 3600000);
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          expires: expiryDate,
+        })
+        .status(200)
+        .json(rest);
     } else {
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
@@ -68,10 +66,13 @@ export const google = async (req, res, next) => {
       const { password: hashedPassword2, ...rest } = newUser._doc;
       const expiryDate = new Date(Date.now() + 3600);
 
-      res.cookie("access-token", token, {
-        httpOnly: true,
-        expires: expiryDate,
-      }).status(200).json(rest);
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          expires: expiryDate,
+        })
+        .status(200)
+        .json(rest);
     }
   } catch (error) {
     next(error);
