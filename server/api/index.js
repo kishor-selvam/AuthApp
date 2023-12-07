@@ -1,8 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import UserRoutes from "./api/routes/user.route.js";
-import AuthRoutes from "./api/routes/auth.route.js";
+import UserRoutes from "./routes/user.route.js";
+import AuthRoutes from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 dotenv.config();

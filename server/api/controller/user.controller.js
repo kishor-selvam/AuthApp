@@ -1,4 +1,4 @@
-import { errorHandler } from "../../util/error.js";
+import { errorHandler } from "../util/error.js";
 import bcryptjs from "bcryptjs";
 import User from "../models/user.model.js";
 
