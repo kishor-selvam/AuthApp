@@ -6,11 +6,11 @@ import {
   signInFailure,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import OAuth from "../components/OAuth";
 
 const Signin = () => {
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
-  console.log(loading, error);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -30,7 +30,6 @@ const Signin = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
       if (data.success === false) {
         dispatch(signInFailure(data));
         return;
@@ -66,9 +65,7 @@ const Signin = () => {
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
-        <button className="text-white px-3 uppercase py-3 rounded-lg bg-red-700">
-          CONTINUE WITH GOOGLE
-        </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>Dont have an account?</p>
