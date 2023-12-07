@@ -15,8 +15,6 @@ const Profile = () => {
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
   const [formData, setFormData] = useState({});
-  console.log(formData);
-  console.log(imagePercent);
   useEffect(() => {
     if (image) {
       handleFileUpload(image);
